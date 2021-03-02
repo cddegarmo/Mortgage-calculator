@@ -2,9 +2,6 @@ import java.util.Scanner;
 import java.text.NumberFormat;
 
 public class MortgageCalculator {
-
-    
-
     public static void main( String[] args ) {
         final byte monthsInYear = 12;
         final byte percentDivider = 100;
