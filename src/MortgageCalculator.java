@@ -1,4 +1,3 @@
-// Contents of this file sourced from YouTube tutorial on Java basics.
 
 import java.util.Scanner;
 import java.text.NumberFormat;
