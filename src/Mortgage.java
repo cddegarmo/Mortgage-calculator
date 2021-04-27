@@ -3,21 +3,25 @@ import java.util.*;
 public class Mortgage {
     private static final int MAX_MORTGAGES = 10;
     private static int loans = 0;
-    private static Set<Mortgage> inventory = new HashSet<>();
+    private static final Set<Mortgage> INVENTORY = new HashSet<>();
 
-    private int salePrice;
+    private final int salePrice;
     private int down = 0;
-    private double interest;
-    private int period;
-    private int principal;
-    private double propertyTax;
+    private final double interest;
+    private final int period;
+    private final int principal;
+    private final double propertyTax;
 
     private Mortgage() {
         Scanner s = new Scanner(System.in);
         System.out.print("Enter sale price (e.g. 300000): ");
         salePrice = s.nextInt();
         System.out.print("Enter down payment amount: ");
-        down = s.nextInt();
+        int dn = s.nextInt();
+        if (dn < 0)
+            throw new IllegalArgumentException("Down payment cannot be negative!");
+        else
+            down = dn;
         principal = salePrice - down;
         System.out.print("Enter interest rate: ");
         interest = s.nextDouble();
@@ -31,24 +35,24 @@ public class Mortgage {
     public static Mortgage create() {
         if(loans < MAX_MORTGAGES)
             return new Mortgage();
-        else if(inventory.size() > 0) {
-            Mortgage mg = inventory.iterator().next();
-            inventory.remove(mg);
+        else if(INVENTORY.size() > 0) {
+            Mortgage mg = INVENTORY.iterator().next();
+            INVENTORY.remove(mg);
             return mg;
         } else
             throw new IllegalStateException();
     }
 
-    public static int getMaxMortgages()        { return MAX_MORTGAGES; }
-    public static int getLoans()               { return loans;         }
-    public static Set<Mortgage> getInventory() { return inventory;     }
+    public static int getMaxMortgages()        { return MAX_MORTGAGES;            }
+    public static int getLoans()               { return loans;                    }
+    public static Set<Mortgage> getInventory() { return new HashSet<>(INVENTORY); }
 
-    public int getSalePrice()                  { return salePrice;     }
-    public int getDownPayment()                { return down;          }
-    public double getInterest()                { return interest;      }
-    public int getPeriod()                     { return period;        }
-    public int getPrincipal()                  { return principal;     }
-    public double getPropertyTax()             { return propertyTax;   }
+    public int getSalePrice()                  { return salePrice;   }
+    public int getDownPayment()                { return down;        }
+    public double getInterest()                { return interest;    }
+    public int getPeriod()                     { return period;      }
+    public int getPrincipal()                  { return principal;   }
+    public double getPropertyTax()             { return propertyTax; }
 
     private double monthlyInterest() {
         double result = interest / Utility.AS_PERCENT / Utility.MONTHS;
@@ -81,7 +85,7 @@ public class Mortgage {
     }
 
     public static void addInventory(Mortgage mg) {
-        inventory.add(mg);
+        INVENTORY.add(mg);
     }
 
     public boolean equals(Object o) {
