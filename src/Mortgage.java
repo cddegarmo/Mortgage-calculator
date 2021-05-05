@@ -1,5 +1,7 @@
 import java.util.*;
 
+// Overall this is a fairly simple approximation of a mortgage payment
+// but the results are accurate enough for a cursory calculation
 public class Mortgage {
     private static final int MAX_MORTGAGES = 10;
     private static int loans = 0;
@@ -12,6 +14,7 @@ public class Mortgage {
     private final int principal;
     private final double propertyTax;
 
+    // Force static factory, prohibit subclassing
     private Mortgage() {
         Scanner s = new Scanner(System.in);
         System.out.print("Enter sale price (e.g. 300000): ");
@@ -40,19 +43,23 @@ public class Mortgage {
             INVENTORY.remove(mg);
             return mg;
         } else
-            throw new IllegalStateException();
+            throw new IllegalStateException("No mortgages available");
     }
 
-    public static int getMaxMortgages()        { return MAX_MORTGAGES;            }
-    public static int getLoans()               { return loans;                    }
-    public static Set<Mortgage> getInventory() { return new HashSet<>(INVENTORY); }
+    public static int getMaxMortgages()        { return MAX_MORTGAGES; }
+    public static int getLoans()               { return loans;         }
 
-    public int getSalePrice()                  { return salePrice;   }
-    public int getDownPayment()                { return down;        }
-    public double getInterest()                { return interest;    }
-    public int getPeriod()                     { return period;      }
-    public int getPrincipal()                  { return principal;   }
-    public double getPropertyTax()             { return propertyTax; }
+    public static Set<Mortgage> getInventory() {
+        // Return defensive copy
+        return new HashSet<>(INVENTORY);
+    }
+
+    public int getSalePrice()      { return salePrice;   }
+    public int getDownPayment()    { return down;        }
+    public double getInterest()    { return interest;    }
+    public int getPeriod()         { return period;      }
+    public int getPrincipal()      { return principal;   }
+    public double getPropertyTax() { return propertyTax; }
 
     private double monthlyInterest() {
         double result = interest / Utility.AS_PERCENT / Utility.MONTHS;
@@ -84,6 +91,8 @@ public class Mortgage {
         System.out.format("%.2f", amount);
     }
 
+    // Project can be expanded to include inventory of mortgages on hand
+    // to distribute in event MAX_MORTGAGES is reached
     public static void addInventory(Mortgage mg) {
         INVENTORY.add(mg);
     }
@@ -106,6 +115,7 @@ public class Mortgage {
         return result;
     }
 
+    // Method serves as main output of program
     public String toString() {
         return String.format("Sale price is $%,d and loan amount is $%,d." +
                 "\nWith an interest rate of %.2f and property taxes of %.2f percent, " +
