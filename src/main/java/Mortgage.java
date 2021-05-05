@@ -87,7 +87,6 @@ public class Mortgage {
     public double monthlyInterest() {
         double result = interest / Utility.AS_PERCENT / Utility.MONTHS;
         result = Math.round(result * 1000000) / 1000000.0;
-        System.out.println(result);
         return result;
     }
 
@@ -104,14 +103,12 @@ public class Mortgage {
         double result =  propertyTax / Utility.AS_PERCENT *
              principal / Utility.MONTHS;
         result = Math.round(result * 100) / 100.0;
-        System.out.println(result);
         return result;
     }
 
     public double getMonthlyPayment() {
         double result = principal * ((monthlyInterest() * Math.pow(monthlyInterest() + 1, getMonths())) /
                 (Math.pow(monthlyInterest() + 1, getMonths()) - 1)) + getTaxes();
-        System.out.println(result);
         return result;
     }
 
