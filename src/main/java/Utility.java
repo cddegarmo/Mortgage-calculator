@@ -1,3 +1,4 @@
+package main.java;
 
 // Class serves as reusable holder of constants, pure utility
 public class Utility {

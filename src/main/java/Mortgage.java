@@ -1,3 +1,5 @@
+package main.java;
+
 import java.util.*;
 
 // Overall this is a fairly simple approximation of a mortgage payment
@@ -82,12 +84,14 @@ public class Mortgage {
     public int getPrincipal()      { return principal;   }
     public double getPropertyTax() { return propertyTax; }
 
-    private double monthlyInterest() {
+    public double monthlyInterest() {
         double result = interest / Utility.AS_PERCENT / Utility.MONTHS;
+        result = Math.round(result * 1000000) / 1000000.0;
+        System.out.println(result);
         return result;
     }
 
-    private int getMonths() {
+    public int getMonths() {
         if(period == 20)
             return Utility.MONTHS_20;
         else if(period == 30)
@@ -96,20 +100,25 @@ public class Mortgage {
             return period * Utility.MONTHS;
     }
 
-    private double getTaxes() {
-        return propertyTax / Utility.AS_PERCENT *
-                principal / Utility.MONTHS;
-    }
-
-    private double getMonthlyPayment() {
-        double result = principal * ((monthlyInterest() * Math.pow(monthlyInterest() + 1, getMonths())) /
-                (Math.pow(monthlyInterest() + 1, getMonths()) - 1)) + getTaxes();
+    public double getTaxes() {
+        double result =  propertyTax / Utility.AS_PERCENT *
+             principal / Utility.MONTHS;
+        result = Math.round(result * 100) / 100.0;
+        System.out.println(result);
         return result;
     }
 
-    public void getAsCurrency() {
+    public double getMonthlyPayment() {
+        double result = principal * ((monthlyInterest() * Math.pow(monthlyInterest() + 1, getMonths())) /
+                (Math.pow(monthlyInterest() + 1, getMonths()) - 1)) + getTaxes();
+        System.out.println(result);
+        return result;
+    }
+
+    public double getAsCurrency() {
         double amount = getMonthlyPayment();
         System.out.format("%.2f", amount);
+        return Math.round(amount * 100) / 100.0;
     }
 
     // Project can be expanded to include inventory of mortgages on hand
