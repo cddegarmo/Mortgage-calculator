@@ -35,6 +35,16 @@ public class Mortgage {
         loans++;
     }
 
+    private Mortgage(int salePrice, int down, double interest, double propertyTax, int period) {
+        this.salePrice = salePrice;
+        this.down      = down;
+        this.interest  = interest;
+        this.propertyTax = propertyTax;
+        this.period      = period;
+        principal        = salePrice - down;
+        loans++;
+    }
+
     public static Mortgage create() {
         if(loans < MAX_MORTGAGES)
             return new Mortgage();
@@ -46,8 +56,19 @@ public class Mortgage {
             throw new IllegalStateException("No mortgages available");
     }
 
-    public static int getMaxMortgages()        { return MAX_MORTGAGES; }
-    public static int getLoans()               { return loans;         }
+    public static Mortgage create(int salePrice, int down, double interest,
+                           double propertyTax, int period) {
+        if (loans < MAX_MORTGAGES)
+            return new Mortgage(salePrice, down, interest, propertyTax, period);
+        else if (INVENTORY.size() > 0) {
+            Mortgage mg = INVENTORY.iterator().next();
+            return mg;
+        } else
+            throw new IllegalStateException("No mortgages available");
+    }
+
+    public static int getMaxMortgages() { return MAX_MORTGAGES; }
+    public static int getLoans()        { return loans;         }
 
     public static Set<Mortgage> getInventory() {
         // Return defensive copy
